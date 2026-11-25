@@ -5,11 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Hörbücher</title>
+<meta name="apple-mobile-web-app-title" content="Hörbücher">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="apple-touch-icon.png">
 <style>
   body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #15141a; color: #f1eef5;
          font: 17px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; text-align: center; padding: 24px; }
   a { color: #e9895c; }
   .muted { color: #a09cab; font-size: .9rem; }
+  ol { text-align: left; max-width: 340px; margin: 16px auto; padding-left: 22px; }
+  li { margin: 8px 0; }
+  img.icon { width: 88px; height: 88px; border-radius: 20px; margin: 0 auto 12px; display: block; }
 </style>
 </head>
 <body>
@@ -18,6 +24,23 @@
   <p class="muted" id="hint"></p>
 </main>
 <script>
+  // ?app = Seite zum Hinzufügen zum Home-Bildschirm: nicht weiterleiten, sondern Anleitung zeigen.
+  // Vom Home-Bildschirm gestartet (standalone) wird ganz normal weitergeleitet.
+  const addMode = new URLSearchParams(location.search).has('app') && !navigator.standalone
+    && !matchMedia('(display-mode: standalone)').matches;
+  if (addMode) {
+    document.querySelector('main').innerHTML = `
+      <img class="icon" src="apple-touch-icon.png" alt="">
+      <h2 style="margin:0 0 4px">Hörbücher</h2>
+      <p class="muted">Als Symbol auf den Home-Bildschirm legen:</p>
+      <ol>
+        <li>Unten (oder oben) auf <b>Teilen</b> tippen <span class="muted">(Quadrat mit Pfeil)</span></li>
+        <li><b>„Zum Home-Bildschirm“</b> wählen <span class="muted">(evtl. erst nach unten scrollen)</span></li>
+        <li>Oben rechts auf <b>Hinzufügen</b> tippen</li>
+      </ol>
+      <p class="muted">Das Symbol öffnet immer die aktuelle Adresse.</p>
+      <p><a href="./">Jetzt ohne Symbol öffnen</a></p>`;
+  } else
   // Holt die aktuelle Tunnel-Adresse (der Mac mini aktualisiert url.json) und leitet weiter.
   fetch('url.json?t=' + Date.now(), { cache: 'no-store' })
     .then((r) => r.json())

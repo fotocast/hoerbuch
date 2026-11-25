@@ -29,6 +29,8 @@
   const addMode = new URLSearchParams(location.search).has('app') && !navigator.standalone
     && !matchMedia('(display-mode: standalone)').matches;
   if (addMode) {
+    // Adresse ohne ?app anzeigen → das Symbol speichert den normalen, weiterleitenden Link
+    history.replaceState(null, '', location.pathname);
     document.querySelector('main').innerHTML = `
       <img class="icon" src="apple-touch-icon.png" alt="">
       <h2 style="margin:0 0 4px">Hörbücher</h2>
